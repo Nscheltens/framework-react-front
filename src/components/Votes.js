@@ -31,9 +31,11 @@ class Votes extends Component {
         this.getVotes();
     }
     getVotes = () => {
-        fetch('https://framework-react-api.herokuapp.com/api/frameworks')
-        .then(res => res.json())
-        .then(json => this.setState({ votes: json }))
+        axios.get('https://framework-react-api.herokuapp.com/api/frameworks')
+        .then(res => {
+            const json = res.data;
+            this.setState({ votes: json })
+        })
         .catch(error => console.log(error))
     }
     addVote = (id, name, vote) => {

@@ -9,8 +9,7 @@ class LoginForm extends Component {
         this.state = {
             userId: 'nil',
             value: '',
-            user: [],
-            hasVote: false,
+            mailList: [],
             Vredirect: false,
             Hredirect: false,
         };
@@ -21,34 +20,69 @@ class LoginForm extends Component {
         this.redirectVote = this.redirectVote.bind(this);
     }
     componentDidMount(){
+        this.setEmailList()
     }
     createNewUser(email){
         var fetchString = 'https://framework-react-api.herokuapp.com/api/voters'
-        var hasvote = true
+        var hasvote = false
         Axios.post(fetchString,{
           email: email,
           hasvote: hasvote
         })
         .then(response => {
           console.log(response)
-          console.log(this.state.userId)
         })
         .catch(error => {
           console.log(error)
         })
-      }
+    }
+    setEmailList(){
+        var fetchString = 'https://framework-react-api.herokuapp.com/api/voters/'
+        Axios.get(fetchString)
+        .then(response => {
+            console.log(response)
+            this.setState({mailList: response.data})
+        })
+        .catch(error => console.log(error))
+    }
+    setVoteFalse(voterId, email){
+        var fetchString = 'https://framework-react-api.herokuapp.com/api/voters/'+ voterId
+        Axios.put(fetchString,{
+            email: email,
+            hasVote: false
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => console.log(error))
+    }
 
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
     handleSubmit(event) {
+        event.preventDefault();
         const emailId = this.state.value
         console.log(emailId)
-        this.createNewUser(emailId)
-        alert('A name was submitted: ' + emailId)
-        event.preventDefault();
-        this.redirectVote();
+        var check = 0;
+        this.state.mailList.forEach(item => {
+            console.log(item.email)
+            console.log(item.email == emailId)
+            if(item.email == emailId){
+                if(!item.hasvote){
+                    check = check + 1
+                }
+            }
+        })
+        if(check > 0){
+            alert('Email ' + emailId +' has already been used')
+            this.redirectHome();
+        } else{
+            this.createNewUser(emailId)
+            alert('An email was submitted: ' + emailId)
+            this.redirectVote();
+        }
     }
     redirectHome(){
         this.setState({Hredirect: true});
@@ -56,42 +90,6 @@ class LoginForm extends Component {
     redirectVote(){
         this.setState({Vredirect: true});
     }
-
-    varifyEmail(emailId){
-        console.log(emailId)
-        this.getEmail()
-        if(this.state.user.email === 'nil'){
-            this.setEmail(emailId)
-            return true
-        }else if(this.state.user.email === emailId){
-            return false
-        }else if(this.state.user.hasVote){
-            return true
-        }else {
-            return false
-        }
-    }
-    getEmail(){
-        var fetchString = '/api/voters/'+ this.state.userId
-        Axios.get(fetchString)
-        .then(response => {
-            console.log(response)
-            this.setState({user: response.data})
-        })
-        .catch(error => console.log(error))
-    }
-    setEmail(emailId){
-        var fetchString = '/api/voters/'+ this.state.userId
-        Axios.put(fetchString, {
-            email: emailId,
-            hasVote: true
-        })
-        .then(response=> {
-            console.log(response)
-        })
-        .catch(error => console.log(error))
-    }
-
     render(){
         const { Vredirect, Hredirect } = this.state;
         if (Vredirect) {
