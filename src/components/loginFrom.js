@@ -18,6 +18,8 @@ class LoginForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.redirectHome = this.redirectHome.bind(this);
+        this.redirectVote = this.redirectVote.bind(this);
     }
     componentDidMount(){
         this.setState({ userId: cookie.load('userId') })
@@ -27,7 +29,7 @@ class LoginForm extends Component {
         //console.log(this.state.userId)
     }
     createNewUser(email){
-        var fetchString = '/api/voters'
+        var fetchString = 'https://framework-react-api.herokuapp.com/api/voters'
         var hasvote = true
         Axios.post(fetchString,{
           email: email,
@@ -35,8 +37,6 @@ class LoginForm extends Component {
         })
         .then(response => {
           console.log(response)
-          cookie.save('userId', response.data.id, {path: '/'})
-          this.setState({ userId: cookie.load('userId') })
           console.log(this.state.userId)
         })
         .catch(error => {
@@ -54,8 +54,14 @@ class LoginForm extends Component {
         this.createNewUser(emailId)
         cookie.save('emailId', emailId, {path: '/'})
         alert('A name was submitted: ' + emailId)
-        this.setState({Vredirect: true});
         event.preventDefault();
+        this.redirectVote();
+    }
+    redirectHome(){
+        this.setState({Hredirect: true});
+    }
+    redirectVote(){
+        this.setState({Vredirect: true});
     }
 
     varifyEmail(emailId){

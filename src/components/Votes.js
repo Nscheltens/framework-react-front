@@ -10,7 +10,7 @@ const TableBody = props => {
                 <td>{row.name}</td>
                 <td>{row.vote}</td>
                 <td>
-                    <button onClick={() => props.addVote(index+1, row.name, row.vote)}>Vote</button>
+                    <button onClick={() => props.addVote(row.id, row.name, row.vote)}>Vote</button>
                 </td>
             </tr>
         )
@@ -24,42 +24,41 @@ class Votes extends Component {
         super(props);
         this.state = {
             votes: [],
-            redirect: false,
         }
+        this.redirectHome = this.redirectHome.bind(this)
     }
 
     componentDidMount(){
         this.getVotes();
     }
-
     getVotes = () => {
-        fetch('/api/frameworks')
+        fetch('https://framework-react-api.herokuapp.com/api/frameworks')
         .then(res => res.json())
         .then(json => this.setState({ votes: json }))
         .catch(error => console.log(error))
     }
     addVote = (id, name, vote) => {
         var newVote = vote + 1;
-        var fetchString = '/api/frameworks/'+id;
+        var fetchString = 'https://framework-react-api.herokuapp.com/api/frameworks/'+id;
         axios.put(fetchString, {
             name: name,
             vote: newVote
         })
         .then(response => {
             console.log(response);
-            this.getVotes();
-            this.setState({redirect: true})
         })
         .catch(error => console.log(error))
+        this.redirectHome()
+    }
+    redirectHome(){
+        let path = '/';
+        this.props.history.push(path)
     }
 
     render() {
-        const { votes, redirect } = this.state;
-        if(redirect) {
-            return <Redirect to='/' />
-        }
+        const { votes } = this.state;
         return (
-            <div className="App">
+            <div>
                 <h1>Voteing Block</h1>
                 <table>
                     <thead>

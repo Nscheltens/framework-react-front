@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import cookie from 'react-cookies';
+//import cookie from 'react-cookies';
 import Home from './components/Home';
 import PublicVotes from './components/PublicVotes';
 import LoginForm from './components/loginFrom';
 import Votes from './components/Votes';
-//import Axios from 'axios';
+import axios from 'axios';
 
 class App extends Component {
   constructor(){
@@ -17,10 +17,45 @@ class App extends Component {
     userId: 'nil'
   }
   componentDidMount(){
+    //this.onLogout()
   }
   onLogout(){
-    cookie.remove('userId', {path: '/'})
-    console.log('remove cookie')
+    var fetchString = 'https://framework-react-api.herokuapp.com/api/frameworks/1';
+    axios.put(fetchString, {
+        name: 'react',
+        vote: 0
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => console.log(error))
+    var fetchString = 'https://framework-react-api.herokuapp.com/api/frameworks/2';
+    axios.put(fetchString, {
+        name: 'angular',
+        vote: 0
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => console.log(error))
+    var fetchString = 'https://framework-react-api.herokuapp.com/api/frameworks/3';
+    axios.put(fetchString, {
+        name: 'ember',
+        vote: 0
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => console.log(error))
+    var fetchString = 'https://framework-react-api.herokuapp.com/api/frameworks/4';
+    axios.put(fetchString, {
+        name: 'vue',
+        vote: 0
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => console.log(error))
   }
   render() {
     return (

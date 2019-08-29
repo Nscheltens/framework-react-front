@@ -4,7 +4,7 @@ import axios from 'axios';
 const TableBody = props => {
     const rows = props.voteData.map((row, index) => {
         return (
-            <tr key={index}>
+            <tr key={row.id-1}>
                 <td>{row.name}</td>
                 <td>{row.vote}</td>
             </tr>
@@ -27,25 +27,13 @@ class PublicVotes extends Component {
     }
 
     getVotes = () => {
-        fetch('/api/frameworks')
-        .then(res => res.json())
-        .then(json => this.setState({ votes: json }))
-        .catch(error => console.log(error))
-    }
-    addVote = (id, name, vote) => {
-        var newVote = vote + 1;
-        var fetchString = '/api/frameworks/'+id;
-        axios.put(fetchString, {
-            name: name,
-            vote: newVote
-        })
-        .then(response => {
-            console.log(response);
-            this.getVotes(); 
+        axios.get('https://framework-react-api.herokuapp.com/api/frameworks')
+        .then(res => {
+            const json = res.data;
+            this.setState({ votes: json })
         })
         .catch(error => console.log(error))
     }
-
     render() {
         const { votes } = this.state;
         return (
