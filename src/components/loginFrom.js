@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
-import cookie from 'react-cookies';
 import Axios from 'axios';
 
 class LoginForm extends Component {
@@ -22,11 +21,6 @@ class LoginForm extends Component {
         this.redirectVote = this.redirectVote.bind(this);
     }
     componentDidMount(){
-        this.setState({ userId: cookie.load('userId') })
-        if(this.state.userId === 'nil'){
-            //this.createNewUser()
-        }
-        //console.log(this.state.userId)
     }
     createNewUser(email){
         var fetchString = 'https://framework-react-api.herokuapp.com/api/voters'
@@ -52,7 +46,6 @@ class LoginForm extends Component {
         const emailId = this.state.value
         console.log(emailId)
         this.createNewUser(emailId)
-        cookie.save('emailId', emailId, {path: '/'})
         alert('A name was submitted: ' + emailId)
         event.preventDefault();
         this.redirectVote();
@@ -77,18 +70,6 @@ class LoginForm extends Component {
         }else {
             return false
         }
-        /*
-        var sitesplit = emailId.split("@")
-        if(sitesplit[1].lenght > 0){
-            var websplit = sitesplit[1].split(".")
-            if(websplit[1].lenght > 0){
-                if(true){
-                    return true
-                }
-            }
-        }
-        return false
-        */
     }
     getEmail(){
         var fetchString = '/api/voters/'+ this.state.userId

@@ -38,7 +38,7 @@ class PublicVotes extends Component {
         const { votes } = this.state;
         return (
             <div className="App">
-                <h1>Voteing Block</h1>
+                <h1>Voting Block</h1>
                 <table>
                     <thead>
                         <tr>

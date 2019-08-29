@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router'
 import axios from 'axios';
 //import cookie from 'react-cookies';
 
@@ -59,7 +58,7 @@ class Votes extends Component {
         const { votes } = this.state;
         return (
             <div>
-                <h1>Voteing Block</h1>
+                <h1>Voting Block</h1>
                 <table>
                     <thead>
                         <tr>
