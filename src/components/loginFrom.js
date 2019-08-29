@@ -45,18 +45,7 @@ class LoginForm extends Component {
         })
         .catch(error => console.log(error))
     }
-    setVoteFalse(voterId, email){
-        var fetchString = 'https://framework-react-api.herokuapp.com/api/voters/'+ voterId
-        Axios.put(fetchString,{
-            email: email,
-            hasVote: false
-        })
-        .then(response => {
-            console.log(response)
-        })
-        .catch(error => console.log(error))
-    }
-
+    
     handleChange(event) {
         this.setState({value: event.target.value});
     }
@@ -64,11 +53,8 @@ class LoginForm extends Component {
     handleSubmit(event) {
         event.preventDefault();
         const emailId = this.state.value
-        console.log(emailId)
         var check = 0;
         this.state.mailList.forEach(item => {
-            console.log(item.email)
-            console.log(item.email == emailId)
             if(item.email == emailId){
                 if(!item.hasvote){
                     check = check + 1
